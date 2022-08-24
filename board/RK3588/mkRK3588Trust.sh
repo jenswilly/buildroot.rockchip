@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cat >$1/RK3566TRUST.ini <<EOF
+cat >$1/RK3588TRUST.ini <<EOF
 [VERSION]
 MAJOR=1
 MINOR=0
@@ -7,7 +7,7 @@ MINOR=0
 SEC=0
 [BL31_OPTION]
 SEC=1
-PATH=$2/bin/rk35/rk3568_bl31_v1.24.elf
+PATH=$2/bin/rk35/rk3588_bl31_v1.26.elf
 ADDR=0x00040000
 [BL32_OPTION]
 SEC=0
@@ -16,4 +16,4 @@ SEC=0
 [OUTPUT]
 PATH=$1/$3
 EOF
-$2/tools/trust_merger $1/RK3566TRUST.ini
+$2/tools/trust_merger $1/RK3588TRUST.ini

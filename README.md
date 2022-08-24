@@ -1,13 +1,11 @@
-# RK3308, RK3328, RK356X buildroot system
+# RK3308, RK3328, RK356X, RK3588 buildroot system
 
-Now builds for rk3308, rk3328 and RK3566
+Now builds for rk3308, rk3328, RK3566 and RK3588
 
 This repo generates a bootable sdcard image for the RK3xxx platform.
 It is a 64 bit image. Based on buildroot, this directory is an external buildroot tree - it integrates into the main buildroot tree seamlessly.
 
 For the RK3399 buildroot images, have a look at this dedicated repo : https://github.com/flatmax/buildroot.rk3399.external
-
-RK3566 requires a little more work on the boot loader.
 
 # Initial setup
 
@@ -18,8 +16,9 @@ cd yourPath
 git clone git://git.busybox.net/buildroot buildroot
 
 # rock pi S tested with version : git checkout 2022.02.1
-# rock pi 3a tested with version : git checkout 73248c03fd04eddad78fea5096cd98b2a2d43e81
+# rock pi 3a tested with version : git checkout 2022.05
 # rock cm3 tested with version : git checkout 2022.05
+# rock 5b tested with version : git checkout 2022.05
 ```
 
 Make sure you have requirements :
@@ -47,6 +46,8 @@ git clone git@github.com:flatmax/buildroot.rockchip.git buildroot.rockchip.ext
 source buildroot.rockchip.ext/setup.rockPiS.sh yourPath/buildroot
 # for the Radxa rock 3 a board
 source buildroot.rockchip.ext/setup.rock3a.sh yourPath/buildroot
+# for the Radxa rock 5b board
+source buildroot.rockchip.ext/setup.rock5b.sh yourPath/buildroot
 # for the Radxa rock cm3 io board
 source buildroot.rockchip.ext/setup.cm3.sh yourPath/buildroot
 # For the RockPi E (rk3328 based board) [needs more work]
@@ -87,12 +88,25 @@ OF=/dev/sdf; rootDrive=`mount | grep " / " | grep $OF`; if [ -z $rootDrive ]; th
 
 Connect to the console debug uart with a serial cable. Or, add the openssh-server pacakge to the buildsystem, then ssh in as user root, no pass.
 
-# Rock 3 a and Rock cm3
-Uboot commands are still manual at this point. Cut and paste the contents of boot.cmd into console when uboot comes up to get linux to boot.
+## ssh RSA keys
+
+To use ssh, put your id_rsa.pub into the authorized_keys in the overlays directory. This will autoload your public RSA key to the embedded system so that you can login.
+```
+$ mkdir -p overlays/root/.ssh; chmod go-rwx overlays/root/.ssh
+$ ls -ld overlays/root/.ssh
+drwx------ 2 me me 4096 Aug  3  2016 overlays/root/.ssh
+$ cat ~/.ssh/id_rsa.pub > overlays/root/.ssh/authorized_keys
+$ ls -l overlays/root/.ssh/authorized_keys
+-rw-r--r-- 1 me me 748 Feb 24 11:17 overlays/root/.ssh/authorized_keys
+```
+
+# Rock 3 a
+Uboot commands are still manual at this point. Cut and paste the contents of boot.cmd into console when uboot comes up to get linux to boot. This is working for the Radxa CM3 board and the fix is to use host mkimage rather the uboot's mkimage because of a bug there.
 
 # TODO
 ## for the rk3308 board
 Try to find suitable rock-chip boot binaries on github. rk3308_ddr_589MHz_uart0_m0_v1.26.bin can't be found in rkbin.
 Shift uboot and the kernel to mainline Linux.
-## for the rk3568 board - rock 3 a and rock cm3
-work out why boot.cmd is not working with uboot - fix that. https://forum.radxa.com/t/autorun-a-uboot-script/10461
+## for the rk3568 board - rock 3 a
+Implement this fix for the rock 3a board
+https://forum.radxa.com/t/autorun-a-uboot-script/10461/6?u=flatmax

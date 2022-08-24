@@ -1,7 +1,7 @@
-Index: uboot-19cefea3b8a7e22fa29b39367b04a8ab90c5c765/make.sh
+Index: uboot-stable-5.10-rock5/make.sh
 ===================================================================
---- uboot-19cefea3b8a7e22fa29b39367b04a8ab90c5c765.orig/make.sh
-+++ uboot-19cefea3b8a7e22fa29b39367b04a8ab90c5c765/make.sh
+--- uboot-stable-5.10-rock5.orig/make.sh
++++ uboot-stable-5.10-rock5/make.sh
 @@ -11,9 +11,9 @@ SUPPORT_LIST=`ls configs/*[r,p][x,v,k][0
  CMD_ARGS=$1
  
@@ -15,7 +15,7 @@ Index: uboot-19cefea3b8a7e22fa29b39367b04a8ab90c5c765/make.sh
  ########################################### User not touch #############################################
  # Declare global INI file searching index name for every chip, update in select_chip_info()
  RKCHIP=
-@@ -259,7 +259,7 @@ function select_toolchain()
+@@ -268,7 +268,7 @@ function select_toolchain()
  			CROSS_COMPILE_ARM64=`cat ${CC_FILE}`
  		else
  			if grep -q '^CONFIG_ARM64=y' .config ; then
